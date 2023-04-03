@@ -52,7 +52,7 @@ if (isset($_POST['login'])){
 <html lang="nl">
 <head>
     <?php include("./parts/head.php") ?>
-    <link rel="stylesheet" href="./login.css">
+    <link rel="stylesheet" href="./style/login.css">
     <title>Login</title>
 </head>
 <body>

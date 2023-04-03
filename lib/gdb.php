@@ -35,7 +35,10 @@ function gdb_validate(gdb_login_db $db, string $input_username, string $input_pw
 
     $result = mysqli_query($conn, "SELECT $db->pwd_col FROM $db->usertable WHERE $db->name_col='$input_username' LIMIT 1");
 
-    if (mysqli_num_rows($result) < 1) return "User by this name not found";
+    if (mysqli_num_rows($result) < 1){
+        gdb_stop($db->conn);
+        return "User by this name not found";
+    } 
     $hash = mysqli_fetch_array($result)[0];
 
     $valid = password_verify($input_pwd, $hash);
@@ -44,7 +47,11 @@ function gdb_validate(gdb_login_db $db, string $input_username, string $input_pw
             $newHash = password_hash( $input_pwd, PASSWORD_DEFAULT );
             mysqli_query($conn, "UPDATE $db->usertable SET $db->pwd_col='$newHash' WHERE $db->name_col='$input_username'");
         }
-    }else return "Invalid username or password";
+    }else{
+        gdb_stop($db->conn);
+        return "Invalid username or password";
+    }
+    gdb_stop($db->conn);
     return false;
 }
 
@@ -52,13 +59,17 @@ function gdb_create(gdb_login_db $db, string $input_username, string $input_pwd)
     $conn = gdb_get($db->conn);
 
     $find_result = mysqli_query($conn, "SELECT 1 FROM $db->usertable WHERE $db->name_col='$input_username'");
-    if (mysqli_num_rows($find_result) != 0) return "This username is already in use";
+    if (mysqli_num_rows($find_result) != 0){
+        gdb_stop($db->conn);
+        return "This username is already in use";
+    }
 
     $hash = password_hash($input_pwd, PASSWORD_DEFAULT);
 
     $insert_result = mysqli_query($conn, "INSERT INTO $db->usertable ($db->name_col, $db->pwd_col) VALUES (
         '$input_username', '$hash'
     )");
+    gdb_stop($db->conn);
     if (!$insert_result) return "Inserting user failed";
     return false; 
 }

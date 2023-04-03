@@ -5,10 +5,6 @@
     padding: 10px;
 }
 
-.flex_center div{
-    margin: 10px;
-}
-
 #form form{
     display: flex;
     flex-direction: column;

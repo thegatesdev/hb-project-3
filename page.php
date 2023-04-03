@@ -11,13 +11,21 @@ if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['user'])){
 
 include_once("./database.php");
 $type = user_type($_SESSION['user']);
-$page = "nopage.php";
+$page;
 if ($type){
     switch ($type[0]){
+        case 1:
+            $page = "management.php";
+            break;
         case 2:
             $page = "checkout.php";
             break;
     }
+}
+
+if (isset($page)){
+    include(PAGES.$page);
+    exit;
 }
 
 ?>
@@ -28,6 +36,6 @@ if ($type){
     <link rel="stylesheet" href="./login.css">
 </head>
 <body>
-    <?php include(PAGES . $page) ?>
+    <?php include("parts/nopage.php") ?>
 </body>
 </html>

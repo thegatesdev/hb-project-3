@@ -6,6 +6,7 @@
     --color-neg: #132b5f;
     --color-neg-dark: #0D2C30;
     --color-pos: #03DF81;
+    --color-pass: #2FB0F8;
     --font: Bahnschrift;
 }
 
@@ -20,6 +21,14 @@ html,body{
     font-size: 20px;
     color: #fff;
     height: 100%;
+}
+
+ul, ol{
+    list-style: none;
+}
+
+li{
+    border-bottom: 1px solid #fff;
 }
 
 input:focus,
@@ -37,6 +46,10 @@ button:focus {
     flex-direction: column;
 }
 
+.flex_center div{
+    margin: 10px;
+}
+
 .messagebox{
     display: flex;
     padding: 20px;
@@ -50,6 +63,12 @@ button:focus {
 
 .messagebox.error{
     color: var(--color-err);
+}
+
+.bordered_field{
+    border: 10px solid var(--color-fg);
+    background: var(--color-neg-dark);
+    padding: 3px;
 }
 
 .text_field{
@@ -111,6 +130,10 @@ button:focus {
 
 .button-quiet:hover{
     opacity: 95%;
+}
+
+.focusglow:focus{
+    box-shadow: 0 0 2px 2px var(--color-fg);
 }
 
 h1, h2, h3{
