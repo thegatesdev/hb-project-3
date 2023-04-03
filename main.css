@@ -1,0 +1,118 @@
+:root{
+    --color-bg: #00311C;
+    --color-fg: #DF8103;
+    --color-err: #ff6d6d;
+    --color-neg-light: #8103DF;
+    --color-neg: #132b5f;
+    --color-neg-dark: #0D2C30;
+    --color-pos: #03DF81;
+    --font: Bahnschrift;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,body{
+    background: var(--color-bg);
+    font-family: var(--font);
+    font-size: 20px;
+    color: #fff;
+    height: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+.flex_center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+.messagebox{
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    flex-direction: column;
+
+    background: var(--color-neg);
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #00000062;
+}
+
+.messagebox.error{
+    color: var(--color-err);
+}
+
+.text_field{
+    background: none;
+    color: #fff;
+    font-family: var(--font);
+    border: none;
+    border-bottom: 3px solid var(--color-fg);
+    padding-bottom: 5px;
+    opacity: 70%;
+    transition-property: opacity, width;
+    transition-duration: 100ms, 100ms;
+    caret-color: var(--color-fg);
+}
+
+.text_field:focus, .text_field:hover{
+    opacity: 95%;
+}
+
+.text_field::placeholder{
+    color: #fff;
+    opacity: 100%;
+}
+
+.button-big{
+    width: 80%;
+    cursor: pointer;
+
+    background: none;
+    border: 3px solid var(--color-fg);
+    color: #fff;
+    font-family: var(--font);
+
+    padding: 5px;
+    transition-property: background, scale;
+    transition-duration: 200ms, 100ms;
+}
+
+.button-big:hover{
+    background: var(--color-fg);
+    scale: 105%;
+}
+
+.button-big:active{
+    scale: 98%;
+}
+
+.button-quiet{
+    width: 70%;
+    cursor: pointer;
+    
+    color: #ffffff;
+    background: none;
+    border: none;
+    opacity: 70%;
+    transition-property: opacity;
+    transition-duration: 100ms;
+}
+
+.button-quiet:hover{
+    opacity: 95%;
+}
+
+h1, h2, h3{
+    margin-bottom: 5px;
+}
