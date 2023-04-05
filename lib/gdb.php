@@ -32,6 +32,7 @@ class gdb_conn{
 
 function gdb_validate(gdb_login_db $db, string $input_username, string $input_pwd): string | false{
     $conn = gdb_get($db->conn);
+    if (!$conn) return "Database connection failed";
 
     $result = mysqli_query($conn, "SELECT $db->pwd_col FROM $db->usertable WHERE $db->name_col='$input_username' LIMIT 1");
 
@@ -57,6 +58,7 @@ function gdb_validate(gdb_login_db $db, string $input_username, string $input_pw
 
 function gdb_create(gdb_login_db $db, string $input_username, string $input_pwd): string | false{
     $conn = gdb_get($db->conn);
+    if (!$conn) return "Database connection failed";
 
     $find_result = mysqli_query($conn, "SELECT 1 FROM $db->usertable WHERE $db->name_col='$input_username'");
     if (mysqli_num_rows($find_result) != 0){

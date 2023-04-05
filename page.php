@@ -20,6 +20,9 @@ if ($type){
         case 2:
             $page = "checkout.php";
             break;
+        case 3:
+            $page = "stock.php";
+            break;
     }
 }
 

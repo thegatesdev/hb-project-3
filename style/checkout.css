@@ -1,3 +1,11 @@
+#calculator{
+    display: flex;
+    flex: 1;
+
+    flex-direction: column;
+    margin-right: 20px;
+}
+
 #container{
     height: 100%;
     box-sizing: border-box;
@@ -6,14 +14,7 @@
     padding-top: 20px;
 
     flex-direction: row;
-}
 
-#calculator{
-    display: flex;
-    flex: 1;
-
-    flex-direction: column;
-    margin-right: 20px;
 }
 
 #calc_display{
@@ -61,21 +62,7 @@
 #products #display{
     flex: 3;
     font-size: 28px;
-}
-
-.button-action{
-    flex: 1;
-    margin: 5px;
-    border: none;
-    transition-property: scale;
-    transition-duration: 100ms;
-    color: var(--color-bg);
-    font-size: 60px;
-}
-
-.button-action:active{
-    scale: 95%;
-    transition-duration: 50ms;
+    overflow: auto;
 }
 
 #products #buttons{
@@ -87,10 +74,12 @@
 
 #addbutton{
     background: var(--color-pos);
+    font-size: 60px;
 }
 
 #removebutton{
     background: var(--color-neg-light);
+    font-size: 60px;
 }
 
 #nextbutton{
@@ -105,5 +94,35 @@
 }
 
 #display_title{
+    top: 0;
     opacity: 70%;
+}
+
+#prodlist{
+    width: 100%;
+    border-spacing: 0;
+}
+
+#prodlist th{
+    opacity: 80%;
+    text-align: left;
+    user-select: none;
+}
+
+.flash_opacity{
+    animation: flash_opacity 300ms linear infinite alternate;
+}
+
+@keyframes flash_opacity {
+    from{
+        opacity: 100%;
+    }to{
+        opacity: 40%;
+    }
+}
+
+#prodlist tr{
+    user-select: none;
+    cursor: pointer;
+    padding: 3px;
 }
