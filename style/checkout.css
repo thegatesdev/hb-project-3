@@ -53,22 +53,27 @@
 }
 
 #products{
-    display: flex;
     flex: 1;
 
+    display: flex;
     flex-direction: column;
+
+    height: 100%;
 }
 
 #products #display{
-    flex: 3;
     font-size: 28px;
-    overflow: auto;
+    flex: 3;
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 #products #buttons{
+    flex: 1;
     display: flex;
     flex-direction: column;
-    flex: 1;
     margin-top: 10px;
 }
 
@@ -94,13 +99,21 @@
 }
 
 #display_title{
-    top: 0;
+    flex: 1;
     opacity: 70%;
+}
+
+#prodlist_container{
+    flex: 10;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 #prodlist{
     width: 100%;
     border-spacing: 0;
+
+    overflow: auto;
 }
 
 #prodlist th{
@@ -125,4 +138,8 @@
     user-select: none;
     cursor: pointer;
     padding: 3px;
+}
+
+#total_price{
+    flex: 1;
 }

@@ -46,6 +46,7 @@ if (isset($_POST['prod_add'])){
             if (isset($prod_num)) unset($products[$prod_num]);
         }
     }
+    unset($_SESSION['adding_product']);
 }
 
 ?>
@@ -91,22 +92,28 @@ if (isset($_POST['prod_add'])){
                     if (isset($_SESSION['adding_product'])) echo "<h2 id='display_title' class='flash_opacity'>Voer aantal in</h2>"; 
                     else echo "<h2 id='display_title'>Producten</h2>";
                 ?>
+                <div id="prodlist_container">
                 <table id="prodlist">
                     <tr><th>Naam</th><th>Eenheid</th><th>Prijs</th><th>Aantal</th></tr>
                     <?php
                         if (isset($_SESSION['prod_list'])){
+                            $total = 0.0;
                             foreach ($_SESSION['prod_list'] as $entry){
                                 $product = $entry['product'];
+                                $amount = $entry['amount'];
+                                $total += $amount * ($price = $product['price']);
                                 echo "<tr>
                                 <td>{$product['description']}</td>
                                 <td>{$product['unit']}</td>
-                                <td>&euro;{$product['price']}</td>
-                                <td>{$entry['amount']}</td>
+                                <td>&euro;$price</td>
+                                <td>$amount</td>
                                 </tr>";
                             }
                         }
                     ?>
                 </table>
+                </div>
+                <h3 id="total_price">Totaal: &euro;<?php echo isset($total) ? $total : 0.0 ?></h3>
             </div>
             <div id="buttons">
                 <div>
