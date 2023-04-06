@@ -28,10 +28,6 @@ ul, ol{
     list-style: none;
 }
 
-li{
-    border-bottom: 1px solid #fff;
-}
-
 input:focus,
 select:focus,
 textarea:focus,

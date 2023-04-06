@@ -1,0 +1,10 @@
+#container{
+    background: var(--color-neg);
+    padding: 10px;
+    text-align: center;
+}
+
+#receipt_table{
+    border-spacing: 20px;
+    text-align: left;
+}

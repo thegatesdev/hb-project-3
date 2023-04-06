@@ -54,6 +54,9 @@ if (isset($_POST['prod_add'])){
         }
     }
     unset($_SESSION['adding_product']);
+}else if (isset($_POST['prod_done'])){
+    header("Location:./receipt.php");
+    exit;
 }
 
 ?>
@@ -129,7 +132,7 @@ if (isset($_POST['prod_add'])){
                     <input type="submit" name="prod_remove" id="removebutton" class="button-action" value="-"></input>
                 </div>
                 <div>
-                    <input type="submit" id="nextbutton" class="button-action" value="Afrekenen"></input>
+                    <input type="submit" name="prod_done" id="nextbutton" class="button-action" value="Afrekenen"></input>
                 </div>
             </div>
         </div>
