@@ -19,14 +19,21 @@ if (isset($_POST['prod_add'])){
             if (isset($products[$prod_num])){
                 // Product is already in the list:
                 // Increase the amount
-                $products[$prod_num]['amount'] += $amount;
+                $entry =& $products[$prod_num];
+                $product = $entry['product'];
+                if (($entry['amount'] += $amount) > $product['storage']){
+                    $entry['amount'] = $product['storage'];
+                }
+                $products[$prod_num] = $entry;
             }else{
                 // Product is not yet in the list:
                 // Get and add the inputted product data
                 $query = "SELECT description, unit, price, storage FROM product WHERE product_num=$prod_num";
                 $result = mysqli_query(gdb_get($db), $query);
                 if (mysqli_num_rows($result) > 0){
-                    $products[$prod_num] = array('amount' => $amount, 'product' => mysqli_fetch_assoc($result));
+                    $data = mysqli_fetch_assoc($result);
+                    if ($data['storage'] < $amount) $amount = $data['storage'];
+                    $products[$prod_num] = array('amount' => $amount, 'product' => $data);
                 }
             }
         }
@@ -102,8 +109,9 @@ if (isset($_POST['prod_add'])){
                                 $product = $entry['product'];
                                 $amount = $entry['amount'];
                                 $total += $amount * ($price = $product['price']);
-                                echo "<tr>
-                                <td>{$product['description']}</td>
+                                echo "<tr";
+                                if ($amount === $product['storage']) echo " style='color:var(--color-err);'";
+                                echo "><td>{$product['description']}</td>
                                 <td>{$product['unit']}</td>
                                 <td>&euro;$price</td>
                                 <td>$amount</td>
