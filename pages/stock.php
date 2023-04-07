@@ -1,6 +1,6 @@
 <?php
 
-$selected_item = isset($_POST['prod_selected']) ? --$_POST['prod_selected'] : null;
+$selected_item = isset($_POST['prod_selected']) && is_numeric($_POST['prod_selected']) ? $_POST['prod_selected'] : null;
 
 if (isset($_POST['search_submit'])) {
     if (!empty($_POST['search_input'])) {
@@ -11,6 +11,17 @@ if (isset($_POST['search_submit'])) {
 else if (isset($_POST['prod_change'])) {
     include("./pages/editstock.php");
     exit;
+}
+if (isset($_POST['prod_edit']) && isset($selected_item)){
+    $query = "UPDATE product SET 
+    description = '{$_POST['edit_description']}',
+    supplier = {$_POST['edit_supplier']},
+    product_group = {$_POST['edit_group']},
+    unit = '{$_POST['edit_unit']}',
+    price = {$_POST['edit_price']},
+    storage = {$_POST['edit_storage']} 
+    WHERE id = $selected_item";
+    mysqli_query($conn, $query);
 }
 
 // Look up products list
@@ -47,7 +58,7 @@ $products = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
 
 <body>
     <form id="container" method="post">
-        <input type="hidden" id="selected_prod_input" name="prod_selected">
+        <input type="hidden" value='<?php echo $selected_item ?>' id="selected_prod_input" name="prod_selected">
         <div id="left">
             <div id="search">
                 <input type="text" name="search_input" id="search_input" placeholder="Filteren...">
@@ -62,7 +73,7 @@ $products = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
                 ?>
             </div>
             <div id="table_container">
-                <table id="product_table" onclick="">
+                <table id="product_table">
                     <tr>
                         <th>Product ID</th>
                         <th>Product</th>
@@ -87,8 +98,8 @@ $products = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
         <div id="right">
             <ul id="product_details">
                 <?php
-                if ($selected_item >= 0 && !empty($products) && sizeof($products) >= $selected_item) {
-                    $prod = $products[$selected_item];
+                if (isset($selected_item) && $selected_item > 0 && !empty($products) && sizeof($products) > $selected_item) {
+                    $prod = $products[$selected_item-1];
                     echo "<li><h2>Product</h2></li>";
                     echo "<li>{$prod['description']}</li>";
                     echo "<li><h2>Product ID</h2></li>";
