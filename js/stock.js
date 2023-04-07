@@ -1,12 +1,7 @@
 const selectedProd = document.getElementById("selected_prod_input");
-
-let selectedElement = null;
+const containerForm = document.getElementById("container");
 
 $("#product_table tr").slice(1).click(function(){
-    $(this).addClass('selected').siblings().removeClass('selected');    
-    selectedElement = $(this).index();
+    selectedProd.value = $(this).index();
+    containerForm.submit();
 });
-
-function beforeSubmit(){
-    selectedProd.value = selectedElement;
-}

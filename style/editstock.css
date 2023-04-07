@@ -1,0 +1,5 @@
+#container{
+    background: var(--color-neg);
+    padding: 10px;
+    text-align: center;
+}

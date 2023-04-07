@@ -1,10 +1,12 @@
-<?php header("Refresh:0; url=login.php"); ?>
+<?php header("Location:login.php"); ?>
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <?php include("./parts/head.php"); ?>
     <title>Index</title>
 </head>
+
 <body>
     <div class="flex_center">
         <div class="messagebox">
@@ -12,4 +14,5 @@
         </div>
     </div>
 </body>
+
 </html>

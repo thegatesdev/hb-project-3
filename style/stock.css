@@ -98,6 +98,10 @@
     border-bottom: 5px solid var(--color-fg);;
 }
 
+#product_details li h2{
+    opacity: 80%;
+}
+
 #product_actions{
     flex: 3;
     padding: 10px;
@@ -110,12 +114,8 @@
     font-size: 40px;
 }
 
-#prod_add{
+#prod_change{
     background: var(--color-pos);
-}
-
-#prod_remove{
-    background: var(--color-neg-light);
 }
 
 #prod_new{
