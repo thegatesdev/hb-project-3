@@ -11,8 +11,7 @@ if (isset($_POST['search_submit'])) {
 else if (isset($_POST['prod_change'])) {
     include("./pages/editstock.php");
     exit;
-}
-if (isset($_POST['prod_edit']) && isset($selected_item)){
+}else if (isset($_POST['prod_edit']) && isset($selected_item)){
     $query = "UPDATE product SET 
     description = '{$_POST['edit_description']}',
     supplier = {$_POST['edit_supplier']},
@@ -20,8 +19,35 @@ if (isset($_POST['prod_edit']) && isset($selected_item)){
     unit = '{$_POST['edit_unit']}',
     price = {$_POST['edit_price']},
     storage = {$_POST['edit_storage']} 
-    WHERE id = $selected_item";
+    WHERE product_num = $selected_item";
     mysqli_query($conn, $query);
+}else if (isset($_FILES['import_product'])){
+    $filename = $_FILES["import_product"]["tmp_name"];
+
+    if (!empty($filename) && $handle = fopen($filename, "r")) {
+        $import_data = array();
+        while (($data = fgetcsv($handle, 1000)) !== false) {
+            $import_data[] = $data; // Append to end of array
+        }
+        fclose($handle);
+    }
+
+    if (isset($import_data)){
+        foreach ($import_data as $row) {
+            $num = (int)filter_var($row[0], FILTER_SANITIZE_NUMBER_INT);
+            // Intval?? No sir!! xD
+            $sql = "INSERT INTO product (product_num, description, supplier, product_group, unit, price, storage) 
+            VALUES ($num, '{$row[1]}', '{$row[2]}', '{$row[3]}', '{$row[4]}', '{$row[5]}', '{$row[6]}') 
+            ON DUPLICATE KEY UPDATE 
+            description = VALUES(description),
+            supplier = VALUES(supplier),
+            product_group = VALUES(product_group),
+            unit = VALUES(unit),
+            price = VALUES(price),
+            storage = storage + VALUES(storage)";
+            mysqli_query($conn, $sql);
+        }
+    }
 }
 
 // Look up products list
@@ -57,7 +83,7 @@ $products = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
 </head>
 
 <body>
-    <form id="container" method="post">
+    <form id="container" method="post" enctype="multipart/form-data">
         <input type="hidden" value='<?php echo $selected_item ?>' id="selected_prod_input" name="prod_selected">
         <div id="left">
             <div id="search">
@@ -98,24 +124,32 @@ $products = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
         <div id="right">
             <ul id="product_details">
                 <?php
-                if (isset($selected_item) && $selected_item > 0 && !empty($products) && sizeof($products) > $selected_item) {
-                    $prod = $products[$selected_item-1];
-                    echo "<li><h2>Product</h2></li>";
-                    echo "<li>{$prod['description']}</li>";
-                    echo "<li><h2>Product ID</h2></li>";
-                    echo "<li>{$prod['product_num']}</li>";
-                    echo "<li><h2>Product Groep</h2></li>";
-                    echo "<li>{$prod['gname']}</li>";
-                    echo "<li><h2>Leverancier</h2></li>";
-                    echo "<li>{$prod['sname']}</li>";
-                    echo "<li><h2>Op voorraad</h2></li>";
-                    echo "<li>{$prod['storage']}</li>";
+                if (isset($selected_item) && is_numeric($selected_item)) {
+                    $query = "SELECT p.product_num, p.description, p.storage, s.name AS sname, g.name AS gname FROM product AS p 
+                    INNER JOIN supplier AS s ON p.supplier = s.id
+                    INNER JOIN product_group AS g ON p.product_group=g.id
+                    WHERE p.product_num=$selected_item";    
+                    $result = mysqli_query($conn, $query);
+                    if (mysqli_num_rows($result) > 0){
+                        $prod = mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
+                        echo "<li><h2>Product</h2></li>";
+                        echo "<li>{$prod['description']}</li>";
+                        echo "<li><h2>Product ID</h2></li>";
+                        echo "<li>{$prod['product_num']}</li>";
+                        echo "<li><h2>Product Groep</h2></li>";
+                        echo "<li>{$prod['gname']}</li>";
+                        echo "<li><h2>Leverancier</h2></li>";
+                        echo "<li>{$prod['sname']}</li>";
+                        echo "<li><h2>Op voorraad</h2></li>";
+                        echo "<li>{$prod['storage']}</li>";
+                    }
                 }
                 ?>
             </ul>
             <div id="product_actions">
                 <input type="submit" name="prod_change" id="prod_change" class="button-action" value="Bewerken">
-                <input type="submit" name="prod_new" id="prod_new" class="button-action" value="Nieuw product">
+                <input style="display: none;" id="import_select" type="file" name="import_product" onchange="form.submit()">
+                <input type="button" id="prod_import" class="button-action" value="Importeren.." onclick="document.getElementById('import_select').click();">
             </div>
         </div>
     </form>

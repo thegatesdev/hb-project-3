@@ -8,3 +8,10 @@
     border-spacing: 20px;
     text-align: left;
 }
+
+#donebutton{
+    font-size: 25px;
+    padding: 5px;
+    background: var(--color-fg);
+    color: #fff;
+}

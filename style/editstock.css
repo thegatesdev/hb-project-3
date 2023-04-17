@@ -3,3 +3,17 @@
     padding: 10px;
     text-align: center;
 }
+
+#container h2{
+    margin-top: 5px;
+}
+
+.text_field{
+    font-size: 23px;
+}
+
+.button-action{
+    color: #fff;
+    padding: 5px;
+    background: var(--color-neg-dark);
+}

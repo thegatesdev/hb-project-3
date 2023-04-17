@@ -15,7 +15,7 @@ if (!isset($_SESSION['prod_list'])) {
 
 <body>
     <div class="flex_center">
-        <div id="container">
+        <form id="container" action="./page.php" method="POST">
             <h1>Kassabon</h1>
             <table id="receipt_table">
                 <tr class="header_row">
@@ -36,9 +36,11 @@ if (!isset($_SESSION['prod_list'])) {
                         <td>&euro;$price</td>
                         </tr>";
                 }
+                unset($_SESSION['prod_list']);
                 ?>
             </table>
-        </div>
+            <input type="submit" value="Klaar" class="button-action" id="donebutton">
+        </form>
     </div>
 </body>
 
