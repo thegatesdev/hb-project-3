@@ -1,5 +1,5 @@
 <?php
-function gdb_validate(mysqli $conn, gdb_login_settings $s, string $input_username, string $input_pwd): string | false
+function gdb_validate(mysqli $conn, gdb_login_settings $s, string $input_username, string $input_pwd)
 {
     $result = mysqli_query($conn, "SELECT $s->pwd_col FROM $s->usertable WHERE $s->name_col='$input_username' LIMIT 1");
 
@@ -16,29 +16,31 @@ function gdb_validate(mysqli $conn, gdb_login_settings $s, string $input_usernam
     } else return "Invalid username or password";
 }
 
-function gdb_create(mysqli $conn, gdb_login_settings $s, string $input_username, string $input_pwd): string | false
+function gdb_create(mysqli $conn, gdb_login_settings $s, string $input_username, string $input_pwd)
 {
     $find_result = mysqli_query($conn, "SELECT 1 FROM $s->usertable WHERE $s->name_col='$input_username'");
-    if (mysqli_num_rows($find_result) != 0) {
-
+    
+    if ($find_result && mysqli_num_rows($find_result) != 0) {
         return "This username is already in use";
     }
 
     $hash = password_hash($input_pwd, PASSWORD_DEFAULT);
 
-    $insert_result = mysqli_query($conn, "INSERT INTO $s->usertable ($s->name_col, $s->pwd_col) VALUES (
-        '$input_username', '$hash'
-    )");
+    $query = "INSERT INTO $s->usertable ($s->name_col, $s->pwd_col) VALUES ('$input_username', '$hash')";
+    $insert_result = mysqli_query($conn, $query);
     if (!$insert_result) return "Inserting user failed";
     return false;
 }
 
 class gdb_login_settings
 {
-    public function __construct(
-        public string $usertable,
-        public string $name_col,
-        public string $pwd_col
-    ) {
+    public string $usertable;
+    public string $name_col;
+    public string $pwd_col;
+
+    public function __construct($usertable,$name_col,$pwd_col) {
+        $this->usertable = $usertable;
+        $this->name_col = $name_col;
+        $this->pwd_col = $pwd_col;
     }
 }

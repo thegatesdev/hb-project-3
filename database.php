@@ -4,13 +4,13 @@ include_once("./lib/gdb.php");
 $login_settings = new gdb_login_settings("user", "name", "pwd_hash");
 
 try {
-    $conn = mysqli_connect("localhost", "root", "", "buskruit");
+    $conn = mysqli_connect("localhost", "d71414_root", "A4S4h0CtbFcoNU8r", "d71414_buskruit");
     mysqli_set_charset($conn, 'utf8');
-} catch (mysqli_sql_exception) {
+} catch (mysqli_sql_exception $e) {
     $conn = false;
 }
 
-function user_type(mysqli $conn, string $username): array | false
+function user_type(mysqli $conn, string $username)
 {
     $query = "SELECT user_type.id, user_type.name FROM user
         INNER JOIN user_type ON user.user_type = user_type.id 
