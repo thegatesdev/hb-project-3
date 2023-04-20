@@ -1,9 +1,10 @@
 <?php
 function gdb_validate(mysqli $conn, gdb_login_settings $s, string $input_username, string $input_pwd)
 {
+    $input_username = mysqli_real_escape_string($conn, $input_username);
     $result = mysqli_query($conn, "SELECT $s->pwd_col FROM $s->usertable WHERE $s->name_col='$input_username' LIMIT 1");
 
-    if (mysqli_num_rows($result) < 1) return "User by this name not found";
+    if (mysqli_num_rows($result) < 1) return "Invalid username or password";
     $hash = mysqli_fetch_array($result)[0];
 
     $valid = password_verify($input_pwd, $hash);
@@ -18,6 +19,7 @@ function gdb_validate(mysqli $conn, gdb_login_settings $s, string $input_usernam
 
 function gdb_create(mysqli $conn, gdb_login_settings $s, string $input_username, string $input_pwd)
 {
+    $input_username = mysqli_real_escape_string($conn, $input_username);
     $find_result = mysqli_query($conn, "SELECT 1 FROM $s->usertable WHERE $s->name_col='$input_username'");
     
     if ($find_result && mysqli_num_rows($find_result) != 0) {

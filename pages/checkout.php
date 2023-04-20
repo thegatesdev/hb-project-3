@@ -9,8 +9,9 @@ if (isset($_POST['prod_add'])) {
         $products = &$_SESSION['prod_list'];
         if (!isset($products)) $products = [];
 
-        if (is_numeric($prod_input)) $prod_num = $prod_input;
+        if (is_numeric($prod_input)) $prod_num = (int) $prod_input;
         else { // Product by description
+            $prod_input = mysqli_escape_string($conn, $prod_input);
             $find_id = "SELECT product_num FROM product WHERE LOWER(description) LIKE LOWER('$prod_input');";
             $result = mysqli_query($conn, $find_id);
             if (mysqli_num_rows($result) > 0) $prod_num = mysqli_fetch_array($result)[0];

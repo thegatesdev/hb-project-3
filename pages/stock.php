@@ -1,24 +1,30 @@
 <?php
 
-$selected_item = isset($_POST['prod_selected']) && is_numeric($_POST['prod_selected']) ? $_POST['prod_selected'] : null;
+$selected_item = isset($_POST['prod_selected']) && is_numeric($_POST['prod_selected']) ? (int)$_POST['prod_selected'] : null;
 
 if (isset($_POST['search_submit'])) {
     if (!empty($_POST['search_input'])) {
         if (!isset($_SESSION['searches'])) $_SESSION['searches'] = [];
-        $_SESSION['searches'][] = $_POST['search_input'];
+        $_SESSION['searches'][] = mysqli_escape_string($conn, $_POST['search_input']);
     }
 } else if (isset($_POST['search_clear'])) unset($_SESSION['searches']);
 else if (isset($_POST['prod_change'])) {
     include("./pages/editstock.php");
     exit;
 }else if (isset($_POST['prod_edit']) && isset($selected_item)){
+    $desc = mysqli_escape_string($conn, $_POST['edit_description']);
+    $supp = mysqli_escape_string($conn, $_POST['edit_supplier']);
+    $gr = mysqli_escape_string($conn, $_POST['edit_group']);
+    $unit = mysqli_escape_string($conn, $_POST['edit_unit']);
+    $price = mysqli_escape_string($conn, $_POST['edit_price']);
+    $stor = mysqli_escape_string($conn, $_POST['edit_storage']);
     $query = "UPDATE product SET 
-    description = '{$_POST['edit_description']}',
-    supplier = {$_POST['edit_supplier']},
-    product_group = {$_POST['edit_group']},
-    unit = '{$_POST['edit_unit']}',
-    price = {$_POST['edit_price']},
-    storage = {$_POST['edit_storage']} 
+    description = '$desc',
+    supplier = '$supp',
+    product_group = '$gr',
+    unit = '$unit',
+    price = '$price',
+    storage = '$stor' 
     WHERE product_num = $selected_item";
     mysqli_query($conn, $query);
 }else if (isset($_FILES['import_product'])){
@@ -34,9 +40,11 @@ else if (isset($_POST['prod_change'])) {
 
     if (isset($import_data)){
         foreach ($import_data as $row) {
+            for ($i = 0; $i > count($row); $i++) $row[$i] = mysqli_escape_string($conn, $row[$i]);
+            
             $num = (int)filter_var($row[0], FILTER_SANITIZE_NUMBER_INT);
             // Intval?? No sir!! xD
-            $sql = "INSERT INTO product (product_num, description, supplier, product_group, unit, price, storage) 
+            $query = "INSERT INTO product (product_num, description, supplier, product_group, unit, price, storage) 
             VALUES ($num, '{$row[1]}', '{$row[2]}', '{$row[3]}', '{$row[4]}', '{$row[5]}', '{$row[6]}') 
             ON DUPLICATE KEY UPDATE 
             description = VALUES(description),
@@ -45,7 +53,7 @@ else if (isset($_POST['prod_change'])) {
             unit = VALUES(unit),
             price = VALUES(price),
             storage = storage + VALUES(storage)";
-            mysqli_query($conn, $sql);
+            mysqli_query($conn, $query);
         }
     }
 }

@@ -12,6 +12,7 @@ try {
 
 function user_type(mysqli $conn, string $username)
 {
+    $username = mysqli_escape_string($conn, $username);
     $query = "SELECT user_type.id, user_type.name FROM user
         INNER JOIN user_type ON user.user_type = user_type.id 
         WHERE user.name LIKE '$username' 

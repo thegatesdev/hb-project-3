@@ -44,21 +44,21 @@ $suppliers = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 echo "<h2>Omschrijving</h2>";
                 echo "<input name='edit_description' type='text' class='text_field' value='{$prod['description']}'>";
                 echo "<h2>Leverancier</h2>";
-
                 echo "<select class='select_field' name='edit_supplier'>";
                 foreach ($suppliers as $s) {
-                    echo "<option value='{$s['id']}'>{$s['name']}</option>";
+                    if ($s['id'] === $prod['sid']){
+                        echo "<option value='{$s['id']}' selected>{$s['name']}</option>";
+                    } else echo "<option value='{$s['id']}'>{$s['name']}</option>";
                 }
                 echo "</select>";
-
                 echo "<h2>Artikelgroep</h2>";
-
                 echo "<select class='select_field' name='edit_group'>";
                 foreach ($groups as $g) {
-                    echo "<option value='{$g['id']}'>{$g['name']}</option>";
+                    if ($g['id'] === $prod['gid']){
+                        echo "<option value='{$g['id']}' selected>{$g['name']}</option>";
+                    } else echo "<option value='{$g['id']}'>{$g['name']}</option>";
                 }
                 echo "</select>";
-
                 echo "<h2>Eenheid</h2>";
                 echo "<input class='text_field' name='edit_unit' type='text' value='{$prod['unit']}'>";
                 echo "<h2>Prijs</h2>";
